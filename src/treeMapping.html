@@ -37,86 +37,40 @@ width:100%;
 <div id="acnt" class="tree well">
     <ul>
         <li>
-            <span><i class="icon-folder-open"></i>
-            Parent</span> 
-            <ul>
+            <span> Balance Sheet</span>
+        </li>
+        <li> 
+        <ul>
                 <li>
-                  <span><i class="icon-minus-sign"></i> Child</span>
-                  
-                    <ul>
-                        <li>
-                          <span><i class="icon-leaf"></i>
-                            Grand Child</span>
-                          
-                        </li>
-                    </ul>
+                  <span>Asset</span>
                 </li>
+                
+                <ul>
                 <li>
-                  <span><i class="icon-minus-sign"></i> Child</span>
-                  
-                  <ul>
-                    <li>
-                      <span><i class="icon-leaf"></i>
-                        Grand Child</span>
-                    </li>
-                    <li>
-                      <span><i class="icon-minus-sign"></i> Grand
-                        Child</span> 
-                      <ul>
-                        <li>
-                          <span><i class="icon-minus-sign"></i>
-                            Great
-                            Grand
-                            Child</span>
-                          <ul>
-                            <li>
-                              <span><i class="icon-leaf"></i>
-                                Great
-                                great
-                                Grand
-                                Child</span>
-                            </li>
-                            <li>
-                              <span><i class="icon-leaf"></i>
-                                Great
-                                great
-                                Grand
-                                Child</span>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <span><i class="icon-leaf"></i>
-                            Great
-                            Grand
-                            Child</span>
-                        </li>
-                        <li>
-                          <span><i class="icon-leaf"></i>
-                            Great
-                            Grand
-                            Child</span>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <span><i class="icon-leaf"></i>
-                        Grand Child</span>
-                    </li>
-                  </ul>
+                  <span class="dallow">Long Term Asset</span>
                 </li>
+                <li class="dallow">
+                  <span>Short Term Asset</span> 
+                </li>
+
+                </ul>
             </ul>
-        </li>
-        <li>
-          <span><i class="icon-folder-open"></i>
-            Parent2</span> 
-          <ul>
-            <li class="dallow">
-              <span><i class="icon-leaf"></i>
-                Child</span> 
-            </li>
-          </ul>
-        </li>
+            <ul>
+              <li>
+                <span>Liability</span>
+              </li>
+              
+              <ul>
+                <li>
+                  <span>Short Term Liability</span>
+                </li>
+                <li class="dallow">
+                  <span>Long Term Liability</span> 
+                </li>
+                
+                </ul>
+            </ul>
+    </li>
     </ul>
 </div>
 </div>
@@ -136,6 +90,34 @@ width:100%;
 </div>
 <script type="text/javascript">
 
+var dragDrop = function() {
+  $(".dallow").draggable(
+            {
+                appendTo: "body",
+                helper: "clone",
+                cursor: "move",
+                revert: "invalid"
+            });
+
+ initDroppable($("table td"));
+            function initDroppable($elements) {
+                $elements.droppable({
+                  
+ 
+                    over: function (event, ui) {
+                        var $this = $(this);
+                    },
+                    drop: function (event, ui) {
+                        var $this = $(this);
+    tobj = $this;         
+                       alert($this);
+                    }
+                });
+            }
+
+}
+
+
 var updateGrid = function(parsedInput) { 
 var grid = $("#fstmt");
 parsedInput.match(/[^\r\n]+/g).forEach(
@@ -151,7 +133,9 @@ parsedInput.match(/[^\r\n]+/g).forEach(
       grid.append(row);
     }
   }
-)}
+)
+dragDrop();
+}
 
 
 var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
@@ -283,59 +267,9 @@ if(drop.addEventListener) {
 
 
 
-var designGrid = function() {
-var str = "";
-for(var i = 1; 100 >= i; i++)
-{ 
-str += "<tr>";
-    for(var q = 1; q < 15; q++) {
-                       if(q === 1) {
-                       str += "<td id="+i+"-"+q+">" + i +"</td>"; 
-                       } else {
-                       str +=  "<td id="+i+"-"+q+">"+"&nbsp; </td>";
-                       }
-                       }
-                       str +="</tr>";
-                       }
-                       $("#fstmt").append(str);
-                       str = "<tr><th></th>"; 
-                       for(var r = 1; r < 14;r++) {
-                         str += "<th>"+String.fromCharCode(96 + r)+"</th>";
-                                          }
-                         str += "</tr>";
-                       $("#fstmt > thead").append(str);
-                       return str;
-}
 
-tobj = null; 
+tobj = null;
                                      
-var dragDrop = function() {
-  $(".dallow").draggable(
-            {
-                appendTo: "body",
-                helper: "clone",
-                cursor: "move",
-                revert: "invalid"
-            });
-
- initDroppable($("table td"));
-            function initDroppable($elements) {
-                $elements.droppable({
-                  
- 
-                    over: function (event, ui) {
-                        var $this = $(this);
-                    },
-                    drop: function (event, ui) {
-                        var $this = $(this);
-                      tobj = $this;
-                      /* alert(ui.draggable.text());*/
-                       alert($this);
-                    }
-                });
-            }
-
-}
 
 
 var designTree = function () {
@@ -354,7 +288,6 @@ var designTree = function () {
 }
 $(function() {
 designTree();
-dragDrop();
 }
 ); 
 </script>
