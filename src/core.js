@@ -1,41 +1,51 @@
 //This is the main computation part 
 //For each part of the coreModel, compute the formulas by giving it
 
-var mergeNode = function(template,companyGraph) { 
+var CoreCalculation = function(name) {
+    this.Name = name;
+}
+
+CoreCalculation.prototype.mergeNode = function(template,companyGraph) { 
    Object.getOwnPropertyNames(template).forEach(val,idx,array) {
        companyGraph[val] = template[val];
    }
 }
 
-var mergePath = function(template,companyGraph) {
+CoreCalculation.prototype.mergePath = function(template,companyGraph) {
     Object.getOwnPropertyName(template).forEach(val,idx,array) {
         var myNode = template[val]; 
         if(myNode.hasOwnProperty("_parentNode")) {
-            var parent = find(myNode,companyGraph);
-            parent._formula = current(myNode._parentNode);
+            var parent = find(myNode._parentNode,companyGraph);
+            parent._formula = function() { return this.current(myNode._parentNode) };
         }
     }
 }
 
-var mergeGraphs = function(template,companyGraph) { 
-    mergeNode(template.nodes,companyGraph.nodes); 
-    mergePath(template.graph,companyGraph.graph); 
+ CoreCalculation.prototype.mergeGraphs = function(template,companyGraph,model) { 
+    this.mergeNode(template.nodes,companyGraph.nodes); 
+    this.mergePath(template.graph[model],companyGraph.graph[model]); 
     return companyGraph;
 }
 
 
-var computeGraph = function(nodes,edges,state,engine) {
+var computeGraph = function(fn,state,engine) {
+    var result = fn(); 
+    state.add(result,val); 
+}
+
+var computeAllGraph = function(nodes,edges,state,engine) {
     Object.getOwnProperty(edges.data).forEach(val,idx,array) {
         var edge  = edge.data[val]; 
         if(state.find(val)) {
 
         }else {
             if(edge.hasOwnProperty("_formula")) {
-                var result = engine.compute(edge._formula); 
-                state.add(result,val); 
+                computeGraph(edge._formula); 
             }
         }
     }
 }
+
+
 
 
