@@ -30,7 +30,7 @@ var timeSeries = {
 //Model
 //  |-Basic graph
 //    |--Company Specific
-template = {
+Template = {
     nodes : {
         balanceSheet : { },
         incomeStatement : { },
@@ -47,12 +47,12 @@ template = {
             },
             data : {
                 balanceSheet : {
-                    _formula : sum(asset,liability,ownerEquity),
-                    _neighbour : [asset,liability,ownerEquity]
+                    _formula : function() {return new function() { return asset;}},
+                    _neighbour : []
                 },
                 asset : {
                     _formula : null,
-                    _neighbour : null; 
+                    _neighbour : null
                 }
                 
             }
@@ -73,22 +73,24 @@ companyGraph =  {
         myShortTermAsset : {}
     },
     graph : {
-        myAsset : {
-            _formula : sum(myLongTermAsset,myShortTermAsset)
-            _neighbour : [myShortTermAsset,myLongTermAsset],
-            _parentNode : asset,//This is special case since the
+        actual :  
+        {
+            myAsset : {
+                _formula : function() { return function() { return this.sum(myLongTermAsset,myShortTermAsset) }},
+                _neighbour : [],
+                _parentNode : "asset"//This is special case since the
             //predecessor will be updated at the runtime so this needs
-            //to have an information about it             
-        },
-        myLongTermAsset : {
-         _formula : function() { return 100;} 
-         _neighbour : []
+                //to have an information about it             
+            },
+            myLongTermAsset : {
+                _formula : function() { return function() { return 100; }},
+                _neighbour : []
+            },
+            myShortTermAsset : {
+                _formula : function() { return function() { return 20; }},
+                _neighbour : []
+            }
         }
-        myShortTermAsset : {
-            _formula : function() { return 20;}
-            _neighbour : []
-        }
-     }
- 
-   }
-
+        
+    }
+}
